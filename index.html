@@ -43,11 +43,171 @@
 <div id="cuentas" class="content hidden"><h2 class="section-titulo">💳 Cuentas</h2><div id="cuentas-container"></div></div>
 <div id="transacciones" class="content hidden"><h2 class="section-titulo">📝 Transacciones</h2><div id="transacciones-container"></div></div>
 
+<!-- MODAL TRANSACCIONES -->
+<div id="modal-transacciones" class="modal-overlay hidden">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>➕ Nueva Transacción</h2>
+            <button class="modal-close" onclick="modalTransacciones.cerrarModal()">✕</button>
+        </div>
+        
+        <div class="modal-tabs">
+            <button class="modal-tab-btn active" onclick="modalTransacciones.cambiarPestana('ingreso')">💰 Ingreso</button>
+            <button class="modal-tab-btn" onclick="modalTransacciones.cambiarPestana('egreso')">📉 Egreso</button>
+            <button class="modal-tab-btn" onclick="modalTransacciones.cambiarPestana('transaccion')">↔️ Transacción</button>
+        </div>
+        
+        <!-- TAB INGRESO -->
+        <div id="tab-ingreso" class="modal-tab">
+            <div class="form-grupo">
+                <label class="form-label">Categoría</label>
+                <input type="text" class="form-input" id="cat-ingreso" placeholder="Ej: Salario">
+            </div>
+            <div class="form-grupo">
+                <label class="form-label">Descripción</label>
+                <input type="text" class="form-input" id="desc-ingreso" placeholder="Ej: Pago de trabajo">
+            </div>
+            <div class="form-grupo">
+                <label class="form-label">Fecha</label>
+                <input type="date" class="form-input" id="fecha-ingreso">
+            </div>
+            <div class="calculadora-box">
+                <input type="text" class="calc-display" id="calc-display-ingreso" readonly>
+                <div class="calc-grid">
+                    <button onclick="modalTransacciones.agregarNumero('7')">7</button>
+                    <button onclick="modalTransacciones.agregarNumero('8')">8</button>
+                    <button onclick="modalTransacciones.agregarNumero('9')">9</button>
+                    <button onclick="modalTransacciones.setOperacion('÷')" class="calc-op">÷</button>
+                    <button onclick="modalTransacciones.agregarNumero('4')">4</button>
+                    <button onclick="modalTransacciones.agregarNumero('5')">5</button>
+                    <button onclick="modalTransacciones.agregarNumero('6')">6</button>
+                    <button onclick="modalTransacciones.setOperacion('×')" class="calc-op">×</button>
+                    <button onclick="modalTransacciones.agregarNumero('1')">1</button>
+                    <button onclick="modalTransacciones.agregarNumero('2')">2</button>
+                    <button onclick="modalTransacciones.agregarNumero('3')">3</button>
+                    <button onclick="modalTransacciones.setOperacion('-')" class="calc-op">−</button>
+                    <button onclick="modalTransacciones.agregarNumero('0')" class="calc-zero">0</button>
+                    <button onclick="modalTransacciones.agregarNumero('.')">,</button>
+                    <button onclick="modalTransacciones.calcular()" class="calc-igual">=</button>
+                    <button onclick="modalTransacciones.setOperacion('+')" class="calc-op">+</button>
+                </div>
+                <button onclick="modalTransacciones.limpiarCalculadora()" class="calc-clear">C</button>
+            </div>
+            <div class="form-grupo">
+                <label class="form-label">Monto</label>
+                <input type="number" class="form-input" id="monto-ingreso" placeholder="0.00" readonly>
+            </div>
+            <button class="btn-primary" onclick="modalTransacciones.guardarIngreso()">Registrar Ingreso</button>
+        </div>
+        
+        <!-- TAB EGRESO -->
+        <div id="tab-egreso" class="modal-tab hidden">
+            <div class="form-grupo">
+                <label class="form-label">Tipo</label>
+                <select class="form-select" id="tipo-egreso">
+                    <option value="Gasto">Gasto</option>
+                    <option value="Obligatoria">Obligatoria</option>
+                </select>
+            </div>
+            <div class="form-grupo">
+                <label class="form-label">Categoría</label>
+                <input type="text" class="form-input" id="cat-egreso" placeholder="Ej: Alimentación">
+            </div>
+            <div class="form-grupo">
+                <label class="form-label">Descripción</label>
+                <input type="text" class="form-input" id="desc-egreso" placeholder="Ej: Supermercado">
+            </div>
+            <div class="form-grupo">
+                <label class="form-label">Fecha</label>
+                <input type="date" class="form-input" id="fecha-egreso">
+            </div>
+            <div class="calculadora-box">
+                <input type="text" class="calc-display" id="calc-display-egreso" readonly>
+                <div class="calc-grid">
+                    <button onclick="modalTransacciones.agregarNumero('7')">7</button>
+                    <button onclick="modalTransacciones.agregarNumero('8')">8</button>
+                    <button onclick="modalTransacciones.agregarNumero('9')">9</button>
+                    <button onclick="modalTransacciones.setOperacion('÷')" class="calc-op">÷</button>
+                    <button onclick="modalTransacciones.agregarNumero('4')">4</button>
+                    <button onclick="modalTransacciones.agregarNumero('5')">5</button>
+                    <button onclick="modalTransacciones.agregarNumero('6')">6</button>
+                    <button onclick="modalTransacciones.setOperacion('×')" class="calc-op">×</button>
+                    <button onclick="modalTransacciones.agregarNumero('1')">1</button>
+                    <button onclick="modalTransacciones.agregarNumero('2')">2</button>
+                    <button onclick="modalTransacciones.agregarNumero('3')">3</button>
+                    <button onclick="modalTransacciones.setOperacion('-')" class="calc-op">−</button>
+                    <button onclick="modalTransacciones.agregarNumero('0')" class="calc-zero">0</button>
+                    <button onclick="modalTransacciones.agregarNumero('.')">,</button>
+                    <button onclick="modalTransacciones.calcular()" class="calc-igual">=</button>
+                    <button onclick="modalTransacciones.setOperacion('+')" class="calc-op">+</button>
+                </div>
+                <button onclick="modalTransacciones.limpiarCalculadora()" class="calc-clear">C</button>
+            </div>
+            <div class="form-grupo">
+                <label class="form-label">Monto</label>
+                <input type="number" class="form-input" id="monto-egreso" placeholder="0.00" readonly>
+            </div>
+            <button class="btn-primary" onclick="modalTransacciones.guardarEgreso()">Registrar Egreso</button>
+        </div>
+        
+        <!-- TAB TRANSACCION -->
+        <div id="tab-transaccion" class="modal-tab hidden">
+            <div class="form-grupo">
+                <label class="form-label">De Cuenta</label>
+                <select class="form-select" id="de-cuenta">
+                    <option value="">Selecciona cuenta origen</option>
+                </select>
+            </div>
+            <div class="form-grupo">
+                <label class="form-label">A Cuenta</label>
+                <select class="form-select" id="a-cuenta">
+                    <option value="">Selecciona cuenta destino</option>
+                </select>
+            </div>
+            <div class="form-grupo">
+                <label class="form-label">Fecha</label>
+                <input type="date" class="form-input" id="fecha-transaccion">
+            </div>
+            <div class="calculadora-box">
+                <input type="text" class="calc-display" id="calc-display-transaccion" readonly>
+                <div class="calc-grid">
+                    <button onclick="modalTransacciones.agregarNumero('7')">7</button>
+                    <button onclick="modalTransacciones.agregarNumero('8')">8</button>
+                    <button onclick="modalTransacciones.agregarNumero('9')">9</button>
+                    <button onclick="modalTransacciones.setOperacion('÷')" class="calc-op">÷</button>
+                    <button onclick="modalTransacciones.agregarNumero('4')">4</button>
+                    <button onclick="modalTransacciones.agregarNumero('5')">5</button>
+                    <button onclick="modalTransacciones.agregarNumero('6')">6</button>
+                    <button onclick="modalTransacciones.setOperacion('×')" class="calc-op">×</button>
+                    <button onclick="modalTransacciones.agregarNumero('1')">1</button>
+                    <button onclick="modalTransacciones.agregarNumero('2')">2</button>
+                    <button onclick="modalTransacciones.agregarNumero('3')">3</button>
+                    <button onclick="modalTransacciones.setOperacion('-')" class="calc-op">−</button>
+                    <button onclick="modalTransacciones.agregarNumero('0')" class="calc-zero">0</button>
+                    <button onclick="modalTransacciones.agregarNumero('.')">,</button>
+                    <button onclick="modalTransacciones.calcular()" class="calc-igual">=</button>
+                    <button onclick="modalTransacciones.setOperacion('+')" class="calc-op">+</button>
+                </div>
+                <button onclick="modalTransacciones.limpiarCalculadora()" class="calc-clear">C</button>
+            </div>
+            <div class="form-grupo">
+                <label class="form-label">Monto</label>
+                <input type="number" class="form-input" id="monto-transaccion" placeholder="0.00" readonly>
+            </div>
+            <button class="btn-primary" onclick="modalTransacciones.guardarTransferencia()">Registrar Transferencia</button>
+        </div>
+    </div>
+</div>
+
+<!-- BOTÓN FLOTANTE -->
+<button class="fab-button" onclick="modalTransacciones.abrirModal()">➕</button>
+
 <script src="js/gs-sync.js"></script>
 <script src="js/app.js"></script>
 <script src="js/dashboard-v2.js"></script>
 <script src="js/presupuesto-v2.js"></script>
 <script src="js/cuentas.js"></script>
 <script src="js/transacciones-v2.js"></script>
+<script src="js/modal-transacciones.js"></script>
 </body>
 </html>

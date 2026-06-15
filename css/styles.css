@@ -59,3 +59,41 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', san
 .progress-bar { width: 100%; height: 8px; background: rgba(107, 165, 154, 0.2); border-radius: 10px; margin-top: 1rem; overflow: hidden; }
 .progress-fill { height: 100%; background: linear-gradient(90deg, #6ba59a 0%, #d4a574 100%); }
 .categoria { display: inline-block; padding: 0.3rem 0.8rem; background: rgba(107, 165, 154, 0.15); border-radius: 0.8rem; font-size: 0.85rem; color: #6ba59a; margin-right: 0.3rem; }
+
+/* ===== MODAL TRANSACCIONES ===== */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; z-index: 2000; }
+.modal-container { background: white; border-radius: 2rem; padding: 2.5rem; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2); }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+.modal-header h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: #2d3e3b; }
+.modal-close { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #8b9693; }
+.modal-close:hover { color: #e88a7e; }
+
+.modal-tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid rgba(107, 165, 154, 0.1); }
+.modal-tab-btn { background: none; border: none; padding: 1rem; font-weight: 700; color: #8b9693; cursor: pointer; transition: all 0.3s; border-bottom: 3px solid transparent; }
+.modal-tab-btn.active { color: #6ba59a; border-bottom-color: #6ba59a; }
+.modal-tab { padding: 1.5rem 0; }
+
+/* ===== CALCULADORA ===== */
+.calculadora-box { margin: 2rem 0; }
+.calc-display { width: 100%; padding: 1rem; font-size: 1.8rem; font-family: 'Courier Prime', monospace; text-align: right; border: 2px solid rgba(107, 165, 154, 0.3); border-radius: 1rem; margin-bottom: 1rem; background: #f9f9f9; font-weight: 700; color: #2d3e3b; }
+.calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+.calc-grid button { padding: 0.8rem; border: 2px solid rgba(107, 165, 154, 0.2); border-radius: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s; background: white; color: #2d3e3b; }
+.calc-grid button:hover { background: rgba(107, 165, 154, 0.1); border-color: #6ba59a; }
+.calc-grid button.calc-op { background: rgba(107, 165, 154, 0.15); color: #6ba59a; }
+.calc-grid button.calc-op:hover { background: rgba(107, 165, 154, 0.3); }
+.calc-grid button.calc-igual { background: #6ba59a; color: white; }
+.calc-grid button.calc-igual:hover { background: #5a9183; }
+.calc-grid button.calc-zero { grid-column: span 2; }
+.calc-clear { width: 100%; padding: 0.8rem; background: #e88a7e; color: white; border: none; border-radius: 0.8rem; font-weight: 700; cursor: pointer; }
+.calc-clear:hover { background: #d87563; }
+
+/* ===== BOTÓN FLOTANTE ===== */
+.fab-button { position: fixed; bottom: 2rem; right: 2rem; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #6ba59a 0%, #5a9183 100%); color: white; border: none; font-size: 2rem; cursor: pointer; box-shadow: 0 8px 24px rgba(107, 165, 154, 0.4); transition: all 0.3s; z-index: 1500; }
+.fab-button:hover { transform: scale(1.1); box-shadow: 0 12px 32px rgba(107, 165, 154, 0.6); }
+.fab-button:active { transform: scale(0.95); }
+
+@media (max-width: 768px) {
+    .modal-container { max-width: 95%; padding: 1.5rem; }
+    .calc-grid { grid-template-columns: repeat(4, 1fr); }
+    .fab-button { width: 50px; height: 50px; font-size: 1.5rem; bottom: 1.5rem; right: 1.5rem; }
+}
