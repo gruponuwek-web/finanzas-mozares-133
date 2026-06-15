@@ -34,9 +34,11 @@ const presupuesto = {
             html += '<p style="color: #8b9693; text-align: center; padding: 2rem;">Sin presupuestos para este mes</p>';
         } else {
             html += '<table class="tabla"><thead><tr><th>Categoría</th><th>Presupuestado</th><th>Realizado</th><th>Diferencia</th><th>%</th><th>Acción</th></tr></thead><tbody>';
+            
             presupuetosMes.forEach(p => {
                 const comp = comparativa[p.categoria] || { presupuestado: p.monto, realizado: 0, diferencia: p.monto, porcentaje: 0 };
                 const estado = comp.realizado > comp.presupuestado ? '🔴 Excedido' : '🟢 En rango';
+                
                 html += `
                     <tr>
                         <td style="font-weight: 700;">${p.categoria}</td>
@@ -48,17 +50,21 @@ const presupuesto = {
                     </tr>
                 `;
             });
+            
             html += '</tbody></table>';
         }
         
         html += '</div>';
+        
         html += `
             <div class="card">
                 <h3 class="card-titulo">➕ Agregar presupuesto</h3>
                 <div class="form-row">
                     <div class="form-grupo">
                         <label class="form-label">Categoría</label>
-                        <input type="text" class="form-input" id="new-pres-cat" placeholder="Ej: Alimentación">
+                        <select class="form-select" id="new-pres-cat">
+                            <option value="">Selecciona categoría</option>
+                        </select>
                     </div>
                     <div class="form-grupo">
                         <label class="form-label">Monto</label>
@@ -88,6 +94,16 @@ const presupuesto = {
         
         document.getElementById('presupuesto-container').innerHTML = html;
         document.getElementById('mes-selector').value = this.mesActual;
+        
+        this.cargarCategorias();
+    },
+    
+    cargarCategorias() {
+        const catSelect = document.getElementById('new-pres-cat');
+        catSelect.innerHTML = '<option value="">Selecciona categoría</option>';
+        app.categorias.egresos.forEach(cat => {
+            catSelect.innerHTML += `<option value="${cat.nombre}">${cat.nombre}</option>`;
+        });
     },
     
     cambiarMes() {

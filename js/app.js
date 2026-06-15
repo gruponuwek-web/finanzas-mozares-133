@@ -11,6 +11,24 @@ const app = {
         '🏠 Nuestro hogar merece lo mejor',
     ],
     
+    categorias: {
+        ingresos: [
+            { id: 1, nombre: 'Salario' },
+            { id: 2, nombre: 'Bonificación' },
+            { id: 3, nombre: 'Trabajo independiente' },
+            { id: 4, nombre: 'Otros ingresos' }
+        ],
+        egresos: [
+            { id: 1, nombre: 'Alimentación' },
+            { id: 2, nombre: 'Transporte' },
+            { id: 3, nombre: 'Servicios' },
+            { id: 4, nombre: 'Entretenimiento' },
+            { id: 5, nombre: 'Salud' },
+            { id: 6, nombre: 'Educación' },
+            { id: 7, nombre: 'Otros gastos' }
+        ]
+    },
+    
     cuentas: [
         { id: 1, nombre: 'Débito Él', tipo: 'Débito', saldo: 15000, oculto: false },
         { id: 2, nombre: 'Débito Ella', tipo: 'Débito', saldo: 12000, oculto: false },
@@ -19,8 +37,8 @@ const app = {
     
     transacciones: [
         { id: 1, tipo: 'Gasto', categoria: 'Alimentación', monto: 500, desc: 'Supermercado', fecha: '2026-06-08' },
-        { id: 2, tipo: 'Depósito', categoria: 'Ingreso', monto: 2000, desc: 'Pago trabajo', fecha: '2026-06-07' },
-        { id: 3, tipo: 'Obligatoria', categoria: 'Servicios', monto: 800, desc: 'Servicios', fecha: '2026-06-06' },
+        { id: 2, tipo: 'Depósito', categoria: 'Salario', monto: 2000, desc: 'Pago trabajo', fecha: '2026-06-07' },
+        { id: 3, tipo: 'Obligatoria', categoria: 'Servicios', monto: 800, desc: 'Luz y agua', fecha: '2026-06-06' },
     ],
     
     presupuestos: [
@@ -66,6 +84,21 @@ const app = {
         if (seccion === 'presupuesto') presupuesto.renderizar();
         if (seccion === 'cuentas') cuentas.renderizar();
         if (seccion === 'transacciones') transacciones.renderizar();
+        if (seccion === 'configuracion') configuracion.renderizar();
+    },
+    
+    agregarCategoria(tipo, nombre) {
+        const maxId = Math.max(...app.categorias[tipo].map(c => c.id), 0);
+        app.categorias[tipo].push({ id: maxId + 1, nombre });
+    },
+    
+    editarCategoria(tipo, id, nombre) {
+        const cat = app.categorias[tipo].find(c => c.id === id);
+        if (cat) cat.nombre = nombre;
+    },
+    
+    eliminarCategoria(tipo, id) {
+        app.categorias[tipo] = app.categorias[tipo].filter(c => c.id !== id);
     }
 };
 

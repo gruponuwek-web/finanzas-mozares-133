@@ -4,6 +4,7 @@ const modalTransacciones = {
     calculadora: { valor: 0, operacion: null, nuevoNumero: true },
     
     abrirModal() {
+        this.cargarCategorias();
         document.getElementById('modal-transacciones').classList.remove('hidden');
         this.abierto = true;
     },
@@ -12,6 +13,33 @@ const modalTransacciones = {
         document.getElementById('modal-transacciones').classList.add('hidden');
         this.abierto = false;
         this.limpiarFormularios();
+    },
+    
+    cargarCategorias() {
+        const catIngresoSelect = document.getElementById('cat-ingreso');
+        const catEgresoSelect = document.getElementById('cat-egreso');
+        const deCuentaSelect = document.getElementById('de-cuenta');
+        const aCuentaSelect = document.getElementById('a-cuenta');
+        
+        // Categorías de ingresos
+        catIngresoSelect.innerHTML = '<option value="">Selecciona categoría</option>';
+        app.categorias.ingresos.forEach(cat => {
+            catIngresoSelect.innerHTML += `<option value="${cat.nombre}">${cat.nombre}</option>`;
+        });
+        
+        // Categorías de egresos
+        catEgresoSelect.innerHTML = '<option value="">Selecciona categoría</option>';
+        app.categorias.egresos.forEach(cat => {
+            catEgresoSelect.innerHTML += `<option value="${cat.nombre}">${cat.nombre}</option>`;
+        });
+        
+        // Cuentas
+        deCuentaSelect.innerHTML = '<option value="">Selecciona cuenta origen</option>';
+        aCuentaSelect.innerHTML = '<option value="">Selecciona cuenta destino</option>';
+        app.cuentas.forEach(cuenta => {
+            deCuentaSelect.innerHTML += `<option value="${cuenta.nombre}">${cuenta.nombre}</option>`;
+            aCuentaSelect.innerHTML += `<option value="${cuenta.nombre}">${cuenta.nombre}</option>`;
+        });
     },
     
     cambiarPestana(pestana) {
@@ -25,7 +53,6 @@ const modalTransacciones = {
         this.resetearCalculadora();
     },
     
-    // CALCULADORA
     agregarNumero(num) {
         const input = document.getElementById(`calc-display-${this.pestanaActual}`);
         if (this.calculadora.nuevoNumero) {
@@ -59,7 +86,6 @@ const modalTransacciones = {
         this.calculadora.operacion = null;
         this.calculadora.nuevoNumero = true;
         
-        // Asignar al monto
         document.getElementById(`monto-${this.pestanaActual}`).value = resultado;
     },
     
@@ -73,7 +99,6 @@ const modalTransacciones = {
         document.getElementById(`calc-display-${this.pestanaActual}`).value = '';
     },
     
-    // GUARDAR TRANSACCIONES
     guardarIngreso() {
         const categoria = document.getElementById('cat-ingreso').value;
         const descripcion = document.getElementById('desc-ingreso').value;
@@ -171,7 +196,6 @@ const modalTransacciones = {
     }
 };
 
-// Inicializar fechas en las fechas de hoy
 window.addEventListener('load', () => {
     const hoy = new Date().toISOString().split('T')[0];
     document.getElementById('fecha-ingreso').value = hoy;

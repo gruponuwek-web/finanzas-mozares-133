@@ -60,6 +60,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', san
 .progress-fill { height: 100%; background: linear-gradient(90deg, #6ba59a 0%, #d4a574 100%); }
 .categoria { display: inline-block; padding: 0.3rem 0.8rem; background: rgba(107, 165, 154, 0.15); border-radius: 0.8rem; font-size: 0.85rem; color: #6ba59a; margin-right: 0.3rem; }
 
+/* ===== CONFIGURACIÓN DE CATEGORÍAS ===== */
+.tabs-config { display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid rgba(107, 165, 154, 0.1); }
+.tab-config-btn { background: none; border: none; padding: 1rem; font-weight: 700; color: #8b9693; cursor: pointer; transition: all 0.3s; border-bottom: 3px solid transparent; }
+.tab-config-btn.active { color: #6ba59a; border-bottom-color: #6ba59a; }
+
+.categorias-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+.categoria-item { background: rgba(107, 165, 154, 0.05); border: 2px solid rgba(107, 165, 154, 0.15); border-radius: 1rem; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+.categoria-info { flex: 1; }
+.categoria-nombre { font-size: 1.1rem; font-weight: 700; color: #2d3e3b; }
+.categoria-acciones { display: flex; gap: 0.5rem; }
+
 /* ===== MODAL TRANSACCIONES ===== */
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; z-index: 2000; }
 .modal-container { background: white; border-radius: 2rem; padding: 2.5rem; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2); }
@@ -96,4 +107,5 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', san
     .modal-container { max-width: 95%; padding: 1.5rem; }
     .calc-grid { grid-template-columns: repeat(4, 1fr); }
     .fab-button { width: 50px; height: 50px; font-size: 1.5rem; bottom: 1.5rem; right: 1.5rem; }
+    .categorias-list { grid-template-columns: 1fr; }
 }

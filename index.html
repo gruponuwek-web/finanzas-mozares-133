@@ -33,6 +33,7 @@
             <button class="navbar-btn" onclick="app.mostrarSeccion('presupuesto')">Presupuesto</button>
             <button class="navbar-btn" onclick="app.mostrarSeccion('cuentas')">Cuentas</button>
             <button class="navbar-btn" onclick="app.mostrarSeccion('transacciones')">Transacciones</button>
+            <button class="navbar-btn" onclick="app.mostrarSeccion('configuracion')">⚙️ Config</button>
             <button class="navbar-btn btn-salir" onclick="app.cerrarSesion()">Salir</button>
         </div>
     </div>
@@ -42,6 +43,7 @@
 <div id="presupuesto" class="content hidden"><h2 class="section-titulo">💰 Presupuesto</h2><div id="presupuesto-container"></div></div>
 <div id="cuentas" class="content hidden"><h2 class="section-titulo">💳 Cuentas</h2><div id="cuentas-container"></div></div>
 <div id="transacciones" class="content hidden"><h2 class="section-titulo">📝 Transacciones</h2><div id="transacciones-container"></div></div>
+<div id="configuracion" class="content hidden"><h2 class="section-titulo">⚙️ Configuración</h2><div id="configuracion-container"></div></div>
 
 <!-- MODAL TRANSACCIONES -->
 <div id="modal-transacciones" class="modal-overlay hidden">
@@ -61,7 +63,7 @@
         <div id="tab-ingreso" class="modal-tab">
             <div class="form-grupo">
                 <label class="form-label">Categoría</label>
-                <input type="text" class="form-input" id="cat-ingreso" placeholder="Ej: Salario">
+                <select class="form-select" id="cat-ingreso"></select>
             </div>
             <div class="form-grupo">
                 <label class="form-label">Descripción</label>
@@ -111,11 +113,11 @@
             </div>
             <div class="form-grupo">
                 <label class="form-label">Categoría</label>
-                <input type="text" class="form-input" id="cat-egreso" placeholder="Ej: Alimentación">
+                <select class="form-select" id="cat-egreso"></select>
             </div>
             <div class="form-grupo">
                 <label class="form-label">Descripción</label>
-                <input type="text" class="form-input" id="desc-egreso" placeholder="Ej: Supermercado">
+                <input type="text" class="form-input" id="desc-egreso" placeholder="Ej: Farmacia">
             </div>
             <div class="form-grupo">
                 <label class="form-label">Fecha</label>
@@ -209,5 +211,6 @@
 <script src="js/cuentas.js"></script>
 <script src="js/transacciones-v2.js"></script>
 <script src="js/modal-transacciones.js"></script>
+<script src="js/categorias.js"></script>
 </body>
 </html>
