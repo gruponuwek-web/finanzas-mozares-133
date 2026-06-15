@@ -101,6 +101,18 @@ const app = {
         app.categorias[tipo] = app.categorias[tipo].filter(c => c.id !== id);
     },
     
+    agregarCuenta(nombre, tipo, saldo) {
+        const maxId = Math.max(...app.cuentas.map(c => c.id), 0);
+        app.cuentas.push({
+            id: maxId + 1,
+            nombre: nombre,
+            tipo: tipo,
+            saldo: saldo,
+            oculto: false,
+            archivado: false
+        });
+    },
+    
     editarCuenta(id, nombre) {
         const cuenta = app.cuentas.find(c => c.id === id);
         if (cuenta) cuenta.nombre = nombre;

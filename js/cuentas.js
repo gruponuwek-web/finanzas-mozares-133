@@ -4,6 +4,32 @@ const cuentas = {
     renderizar() {
         let html = `
             <div class="card">
+                <h3 class="card-titulo">➕ Agregar Nueva Cuenta</h3>
+                <div class="form-row">
+                    <div class="form-grupo">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-input" id="nueva-cuenta-nombre" placeholder="Ej: Débito Personal">
+                    </div>
+                    <div class="form-grupo">
+                        <label class="form-label">Tipo</label>
+                        <select class="form-select" id="nueva-cuenta-tipo">
+                            <option value="Débito">Débito</option>
+                            <option value="Crédito">Crédito</option>
+                            <option value="Ahorros">Ahorros</option>
+                            <option value="Efectivo">Efectivo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-grupo">
+                    <label class="form-label">Saldo Inicial</label>
+                    <input type="number" class="form-input" id="nueva-cuenta-saldo" placeholder="0.00">
+                </div>
+                <button class="btn-primary" onclick="cuentas.agregarCuenta()">Crear Cuenta</button>
+            </div>
+        `;
+        
+        html += `
+            <div class="card">
                 <h3 class="card-titulo">💳 Gestionar Cuentas</h3>
                 <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
                     <button class="btn-toggle" onclick="cuentas.mostrarArchivadas = !cuentas.mostrarArchivadas; cuentas.renderizar();">
@@ -33,6 +59,8 @@ const cuentas = {
                 `;
             });
             html += '</div>';
+        } else {
+            html += '<div class="card"><p style="color: #8b9693; text-align: center; padding: 2rem;">Sin cuentas activas</p></div>';
         }
         
         if (cuentas.mostrarArchivadas && archivadas.length > 0) {
@@ -57,6 +85,26 @@ const cuentas = {
         }
         
         document.getElementById('cuentas-container').innerHTML = html;
+    },
+    
+    agregarCuenta() {
+        const nombre = document.getElementById('nueva-cuenta-nombre').value;
+        const tipo = document.getElementById('nueva-cuenta-tipo').value;
+        const saldo = parseFloat(document.getElementById('nueva-cuenta-saldo').value);
+        
+        if (!nombre || !tipo || !saldo) {
+            alert('Completa todos los campos');
+            return;
+        }
+        
+        app.agregarCuenta(nombre, tipo, saldo);
+        
+        document.getElementById('nueva-cuenta-nombre').value = '';
+        document.getElementById('nueva-cuenta-tipo').value = 'Débito';
+        document.getElementById('nueva-cuenta-saldo').value = '';
+        
+        this.renderizar();
+        alert('✅ Cuenta creada exitosamente');
     },
     
     abrirEditarCuenta(id) {
