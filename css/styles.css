@@ -84,19 +84,22 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', san
 .modal-tab-btn.active { color: #6ba59a; border-bottom-color: #6ba59a; }
 .modal-tab { padding: 1.5rem 0; }
 
-/* ===== CALCULADORA ===== */
+/* ===== CALCULADORA NUEVA ===== */
 .calculadora-box { margin: 2rem 0; }
 .calc-display { width: 100%; padding: 1rem; font-size: 1.8rem; font-family: 'Courier Prime', monospace; text-align: right; border: 2px solid rgba(107, 165, 154, 0.3); border-radius: 1rem; margin-bottom: 1rem; background: #f9f9f9; font-weight: 700; color: #2d3e3b; }
+
 .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
 .calc-grid button { padding: 0.8rem; border: 2px solid rgba(107, 165, 154, 0.2); border-radius: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s; background: white; color: #2d3e3b; }
 .calc-grid button:hover { background: rgba(107, 165, 154, 0.1); border-color: #6ba59a; }
-.calc-grid button.calc-op { background: rgba(107, 165, 154, 0.15); color: #6ba59a; }
+.calc-grid button.calc-op { background: rgba(107, 165, 154, 0.15); color: #6ba59a; font-weight: 900; }
 .calc-grid button.calc-op:hover { background: rgba(107, 165, 154, 0.3); }
-.calc-grid button.calc-igual { background: #6ba59a; color: white; }
-.calc-grid button.calc-igual:hover { background: #5a9183; }
 .calc-grid button.calc-zero { grid-column: span 2; }
-.calc-clear { width: 100%; padding: 0.8rem; background: #e88a7e; color: white; border: none; border-radius: 0.8rem; font-weight: 700; cursor: pointer; }
-.calc-clear:hover { background: #d87563; }
+
+.calc-botones-inferiores { display: grid; grid-template-columns: 2.5fr 1fr; gap: 0.5rem; margin-top: 0.5rem; }
+.calc-igual { background: #6ba59a !important; color: white; grid-column: span 1; }
+.calc-igual:hover { background: #5a9183 !important; }
+.calc-clear { background: #e88a7e !important; color: white; border: none; }
+.calc-clear:hover { background: #d87563 !important; }
 
 /* ===== BOTÓN FLOTANTE ===== */
 .fab-button { position: fixed; bottom: 2rem; right: 2rem; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #6ba59a 0%, #5a9183 100%); color: white; border: none; font-size: 2rem; cursor: pointer; box-shadow: 0 8px 24px rgba(107, 165, 154, 0.4); transition: all 0.3s; z-index: 1500; }
@@ -105,7 +108,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', san
 
 @media (max-width: 768px) {
     .modal-container { max-width: 95%; padding: 1.5rem; }
-    .calc-grid { grid-template-columns: repeat(4, 1fr); }
     .fab-button { width: 50px; height: 50px; font-size: 1.5rem; bottom: 1.5rem; right: 1.5rem; }
     .categorias-list { grid-template-columns: 1fr; }
 }

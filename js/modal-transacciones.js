@@ -5,6 +5,7 @@ const modalTransacciones = {
     
     abrirModal() {
         this.cargarCategorias();
+        this.cargarCuentas();
         document.getElementById('modal-transacciones').classList.remove('hidden');
         this.abierto = true;
     },
@@ -18,28 +19,35 @@ const modalTransacciones = {
     cargarCategorias() {
         const catIngresoSelect = document.getElementById('cat-ingreso');
         const catEgresoSelect = document.getElementById('cat-egreso');
-        const deCuentaSelect = document.getElementById('de-cuenta');
-        const aCuentaSelect = document.getElementById('a-cuenta');
         
-        // Categorías de ingresos
         catIngresoSelect.innerHTML = '<option value="">Selecciona categoría</option>';
         app.categorias.ingresos.forEach(cat => {
             catIngresoSelect.innerHTML += `<option value="${cat.nombre}">${cat.nombre}</option>`;
         });
         
-        // Categorías de egresos
         catEgresoSelect.innerHTML = '<option value="">Selecciona categoría</option>';
         app.categorias.egresos.forEach(cat => {
             catEgresoSelect.innerHTML += `<option value="${cat.nombre}">${cat.nombre}</option>`;
         });
+    },
+    
+    cargarCuentas() {
+        const deCuentaIngresoSelect = document.getElementById('cuenta-ingreso');
+        const deCuentaEgresoSelect = document.getElementById('cuenta-egreso');
+        const deCuentaTransferSelect = document.getElementById('de-cuenta');
+        const aCuentaTransferSelect = document.getElementById('a-cuenta');
         
-        // Cuentas
-        deCuentaSelect.innerHTML = '<option value="">Selecciona cuenta origen</option>';
-        aCuentaSelect.innerHTML = '<option value="">Selecciona cuenta destino</option>';
-        app.cuentas.forEach(cuenta => {
-            deCuentaSelect.innerHTML += `<option value="${cuenta.nombre}">${cuenta.nombre}</option>`;
-            aCuentaSelect.innerHTML += `<option value="${cuenta.nombre}">${cuenta.nombre}</option>`;
-        });
+        const opcionesCuentas = '<option value="">Selecciona cuenta</option>' + 
+            app.cuentas.map(c => `<option value="${c.nombre}">${c.nombre}</option>`).join('');
+        
+        deCuentaIngresoSelect.innerHTML = opcionesCuentas;
+        deCuentaEgresoSelect.innerHTML = opcionesCuentas;
+        
+        deCuentaTransferSelect.innerHTML = '<option value="">Selecciona cuenta origen</option>' +
+            app.cuentas.map(c => `<option value="${c.nombre}">${c.nombre}</option>`).join('');
+        
+        aCuentaTransferSelect.innerHTML = '<option value="">Selecciona cuenta destino</option>' +
+            app.cuentas.map(c => `<option value="${c.nombre}">${c.nombre}</option>`).join('');
     },
     
     cambiarPestana(pestana) {
@@ -85,8 +93,6 @@ const modalTransacciones = {
         this.calculadora.valor = 0;
         this.calculadora.operacion = null;
         this.calculadora.nuevoNumero = true;
-        
-        document.getElementById(`monto-${this.pestanaActual}`).value = resultado;
     },
     
     limpiarCalculadora() {
@@ -102,10 +108,11 @@ const modalTransacciones = {
     guardarIngreso() {
         const categoria = document.getElementById('cat-ingreso').value;
         const descripcion = document.getElementById('desc-ingreso').value;
-        const monto = parseFloat(document.getElementById('monto-ingreso').value);
+        const monto = parseFloat(document.getElementById('calc-display-ingreso').value);
         const fecha = document.getElementById('fecha-ingreso').value;
+        const cuenta = document.getElementById('cuenta-ingreso').value;
         
-        if (!categoria || !descripcion || !monto || !fecha) {
+        if (!categoria || !descripcion || !monto || !fecha || !cuenta) {
             alert('Completa todos los campos');
             return;
         }
@@ -116,22 +123,24 @@ const modalTransacciones = {
             categoria: categoria,
             monto: monto,
             desc: descripcion,
-            fecha: fecha
+            fecha: fecha,
+            cuenta: cuenta
         });
         
         this.cerrarModal();
         dashboard.renderizar();
-        alert('✅ Ingreso registrado');
+        alert('✅ Ingreso registrado en ' + cuenta);
     },
     
     guardarEgreso() {
         const categoria = document.getElementById('cat-egreso').value;
         const descripcion = document.getElementById('desc-egreso').value;
-        const monto = parseFloat(document.getElementById('monto-egreso').value);
+        const monto = parseFloat(document.getElementById('calc-display-egreso').value);
         const fecha = document.getElementById('fecha-egreso').value;
         const tipo = document.getElementById('tipo-egreso').value;
+        const cuenta = document.getElementById('cuenta-egreso').value;
         
-        if (!categoria || !descripcion || !monto || !fecha) {
+        if (!categoria || !descripcion || !monto || !fecha || !cuenta) {
             alert('Completa todos los campos');
             return;
         }
@@ -142,18 +151,19 @@ const modalTransacciones = {
             categoria: categoria,
             monto: monto,
             desc: descripcion,
-            fecha: fecha
+            fecha: fecha,
+            cuenta: cuenta
         });
         
         this.cerrarModal();
         dashboard.renderizar();
-        alert('✅ Egreso registrado');
+        alert('✅ Egreso registrado desde ' + cuenta);
     },
     
     guardarTransferencia() {
         const deCuenta = document.getElementById('de-cuenta').value;
         const aCuenta = document.getElementById('a-cuenta').value;
-        const monto = parseFloat(document.getElementById('monto-transaccion').value);
+        const monto = parseFloat(document.getElementById('calc-display-transaccion').value);
         const fecha = document.getElementById('fecha-transaccion').value;
         
         if (!deCuenta || !aCuenta || !monto || !fecha) {
@@ -172,7 +182,9 @@ const modalTransacciones = {
             categoria: `${deCuenta} → ${aCuenta}`,
             monto: monto,
             desc: `Transferencia`,
-            fecha: fecha
+            fecha: fecha,
+            cuentaOrigen: deCuenta,
+            cuentaDestino: aCuenta
         });
         
         this.cerrarModal();
@@ -183,15 +195,14 @@ const modalTransacciones = {
     limpiarFormularios() {
         document.getElementById('cat-ingreso').value = '';
         document.getElementById('desc-ingreso').value = '';
-        document.getElementById('monto-ingreso').value = '';
         document.getElementById('fecha-ingreso').value = new Date().toISOString().split('T')[0];
+        document.getElementById('cuenta-ingreso').value = '';
         
         document.getElementById('cat-egreso').value = '';
         document.getElementById('desc-egreso').value = '';
-        document.getElementById('monto-egreso').value = '';
         document.getElementById('fecha-egreso').value = new Date().toISOString().split('T')[0];
+        document.getElementById('cuenta-egreso').value = '';
         
-        document.getElementById('monto-transaccion').value = '';
         document.getElementById('fecha-transaccion').value = new Date().toISOString().split('T')[0];
     }
 };
