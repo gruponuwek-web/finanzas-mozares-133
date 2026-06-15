@@ -95,10 +95,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', san
 .calc-grid button.calc-op:hover { background: rgba(107, 165, 154, 0.3); }
 .calc-grid button.calc-zero { grid-column: span 2; }
 
-.calc-botones-inferiores { display: grid; grid-template-columns: 2.5fr 1fr; gap: 0.5rem; margin-top: 0.5rem; }
-.calc-igual { background: #6ba59a !important; color: white; grid-column: span 1; }
+.calc-botones-inferiores { display: grid; grid-template-columns: 3fr 1fr; gap: 0.5rem; margin-top: 0.5rem; }
+.calc-igual { background: #6ba59a !important; color: white; grid-column: span 1; padding: 1rem !important; font-size: 1.1rem !important; font-weight: 900 !important; }
 .calc-igual:hover { background: #5a9183 !important; }
-.calc-clear { background: #e88a7e !important; color: white; border: none; }
+.calc-clear { background: #e88a7e !important; color: white; border: none; padding: 1rem !important; font-size: 0.9rem !important; font-weight: 700 !important; }
 .calc-clear:hover { background: #d87563 !important; }
 
 /* ===== BOTÓN FLOTANTE ===== */
