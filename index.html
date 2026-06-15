@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💚 Finanzas Mozares</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+<div id="portada" class="portada">
+    <div class="portada-container">
+        <h1 class="portada-titulo">💚 Finanzas Mozares</h1>
+        <div class="portada-card">
+            <div class="reloj" id="reloj">00:00:00</div>
+            <div class="fecha" id="fecha">Lunes, 1 de enero</div>
+            <p class="frase" id="frase">Cargando...</p>
+            <p class="pregunta">¿Quién eres?</p>
+            <div class="botones-usuario">
+                <button class="btn-usuario btn-el" onclick="app.iniciarSesion('el')">💙 Él</button>
+                <button class="btn-usuario btn-ella" onclick="app.iniciarSesion('ella')">🧡 Ella</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="navbar" class="navbar hidden">
+    <div class="navbar-content">
+        <h1 class="navbar-titulo">💚 FM</h1>
+        <div class="navbar-menu">
+            <button class="navbar-btn active" onclick="app.mostrarSeccion('dashboard')">Dashboard</button>
+            <button class="navbar-btn" onclick="app.mostrarSeccion('presupuesto')">Presupuesto</button>
+            <button class="navbar-btn" onclick="app.mostrarSeccion('cuentas')">Cuentas</button>
+            <button class="navbar-btn" onclick="app.mostrarSeccion('transacciones')">Transacciones</button>
+            <button class="navbar-btn btn-salir" onclick="app.cerrarSesion()">Salir</button>
+        </div>
+    </div>
+</div>
+
+<div id="dashboard" class="content hidden"><h2 class="section-titulo">📊 Dashboard - <span id="usuario-nombre">Él</span></h2><div id="dashboard-container"></div></div>
+<div id="presupuesto" class="content hidden"><h2 class="section-titulo">💰 Presupuesto</h2><div id="presupuesto-container"></div></div>
+<div id="cuentas" class="content hidden"><h2 class="section-titulo">💳 Cuentas</h2><div id="cuentas-container"></div></div>
+<div id="transacciones" class="content hidden"><h2 class="section-titulo">📝 Transacciones</h2><div id="transacciones-container"></div></div>
+
+<script src="gs-sync.js"></script>
+<script src="app.js"></script>
+<script src="dashboard-v2.js"></script>
+<script src="presupuesto-v2.js"></script>
+<script src="cuentas.js"></script>
+<script src="transacciones-v2.js"></script>
+</body>
+</html>

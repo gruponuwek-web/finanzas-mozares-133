@@ -1,0 +1,31 @@
+@media (max-width: 768px) {
+    .portada-titulo { font-size: 2.5rem; }
+    .reloj { font-size: 2.5rem; }
+    .section-titulo { font-size: 1.8rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .grid-4 { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .navbar-menu { flex-wrap: wrap; }
+    .navbar-btn { padding: 0.6rem 1rem; font-size: 0.85rem; }
+    .content { padding: 1.5rem 1rem; }
+    .tabla { font-size: 0.9rem; }
+    .tabla th, .tabla td { padding: 0.7rem; }
+    .transaccion-item { flex-direction: column; align-items: flex-start; }
+    .transaccion-monto { margin-top: 0.5rem; }
+    .kpi-valor { font-size: 1.8rem; }
+    .card { padding: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+    .portada-titulo { font-size: 2rem; }
+    .reloj { font-size: 1.8rem; }
+    .portada-card { padding: 2rem 1.5rem; }
+    .section-titulo { font-size: 1.5rem; }
+    .navbar-titulo { font-size: 1.3rem; }
+    .botones-usuario { gap: 0.5rem; }
+    .btn-usuario { padding: 0.8rem; font-size: 0.9rem; }
+    .navbar-btn { padding: 0.5rem 0.8rem; font-size: 0.75rem; }
+    .btn-primary { padding: 0.8rem 1rem; }
+    .kpi-valor { font-size: 1.5rem; }
+    .kpi-label { font-size: 0.75rem; }
+}
