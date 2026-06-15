@@ -1,72 +1,98 @@
 const cuentas = {
+    mostrarArchivadas: false,
+    
     renderizar() {
-        let html = '<div class="grid-2">';
-        app.cuentas.forEach(c => {
-            html += `
-                <div class="cuenta-card">
-                    <p class="cuenta-nombre">${c.nombre}</p>
-                    <p style="font-size: 0.85rem; color: #8b9693; margin-bottom: 1rem;">${c.tipo}</p>
-                    <p class="cuenta-saldo">${c.oculto ? '••••' : '$' + c.saldo.toLocaleString('es-MX')}</p>
-                    <div class="cuenta-botones">
-                        <button class="btn-sm btn-edit" onclick="cuentas.toggleOcultar(${c.id})">👁️ ${c.oculto ? 'Ver' : 'Ocultar'}</button>
-                        <button class="btn-sm btn-delete" onclick="cuentas.eliminar(${c.id})">🗑️ Eliminar</button>
-                    </div>
-                </div>
-            `;
-        });
-        html += '</div>';
-        
-        html += `
+        let html = `
             <div class="card">
-                <h3 class="card-titulo">➕ Agregar cuenta</h3>
-                <div class="form-row">
-                    <div class="form-grupo">
-                        <label class="form-label">Nombre</label>
-                        <input type="text" class="form-input" id="new-cuenta-nombre" placeholder="Ej: Débito">
-                    </div>
-                    <div class="form-grupo">
-                        <label class="form-label">Tipo</label>
-                        <select class="form-select" id="new-cuenta-tipo">
-                            <option>Débito</option>
-                            <option>Ahorros</option>
-                            <option>Crédito</option>
-                        </select>
-                    </div>
+                <h3 class="card-titulo">💳 Gestionar Cuentas</h3>
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    <button class="btn-toggle" onclick="cuentas.mostrarArchivadas = !cuentas.mostrarArchivadas; cuentas.renderizar();">
+                        ${cuentas.mostrarArchivadas ? '👁️ Ocultar archivadas' : '📁 Mostrar archivadas'}
+                    </button>
                 </div>
-                <div class="form-grupo">
-                    <label class="form-label">Saldo</label>
-                    <input type="number" class="form-input" id="new-cuenta-saldo" placeholder="0.00">
-                </div>
-                <button class="btn-primary" onclick="cuentas.agregar()">Crear cuenta</button>
             </div>
         `;
+        
+        const activas = app.cuentas.filter(c => !c.archivado);
+        const archivadas = app.cuentas.filter(c => c.archivado);
+        
+        if (activas.length > 0) {
+            html += '<div class="grid-2">';
+            activas.forEach(cuenta => {
+                html += `
+                    <div class="cuenta-card">
+                        <div class="cuenta-nombre">${cuenta.nombre}</div>
+                        <div class="cuenta-tipo" style="font-size: 0.85rem; color: #8b9693; margin-bottom: 0.5rem;">${cuenta.tipo}</div>
+                        <div class="cuenta-saldo">${cuenta.oculto ? '••••' : '$' + cuenta.saldo.toLocaleString('es-MX')}</div>
+                        <div class="cuenta-botones">
+                            <button class="btn-sm btn-edit" onclick="cuentas.abrirEditarCuenta(${cuenta.id})">✏️ Editar</button>
+                            <button class="btn-sm btn-hide" onclick="cuentas.toggleOcultar(${cuenta.id});">${cuenta.oculto ? '👁️' : '👁️‍🗨️'}</button>
+                            <button class="btn-sm btn-archive" onclick="cuentas.archivarCuenta(${cuenta.id})">📁 Archivar</button>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+        }
+        
+        if (cuentas.mostrarArchivadas && archivadas.length > 0) {
+            html += `
+                <div class="card" style="opacity: 0.6; background: rgba(107, 165, 154, 0.05);">
+                    <h3 class="card-titulo">📁 Cuentas Archivadas (${archivadas.length})</h3>
+                    <div class="grid-2">
+            `;
+            archivadas.forEach(cuenta => {
+                html += `
+                    <div class="cuenta-card" style="opacity: 0.7; border: 2px dashed #8b9693;">
+                        <div class="cuenta-nombre" style="color: #8b9693;">🔒 ${cuenta.nombre}</div>
+                        <div class="cuenta-tipo" style="font-size: 0.85rem; color: #8b9693; margin-bottom: 0.5rem;">${cuenta.tipo}</div>
+                        <div class="cuenta-saldo" style="color: #8b9693;">$${cuenta.saldo.toLocaleString('es-MX')}</div>
+                        <div class="cuenta-botones">
+                            <button class="btn-sm btn-restore" onclick="cuentas.desarchivarCuenta(${cuenta.id})">♻️ Restaurar</button>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div></div>';
+        }
         
         document.getElementById('cuentas-container').innerHTML = html;
     },
     
-    agregar() {
-        const nombre = document.getElementById('new-cuenta-nombre').value;
-        const tipo = document.getElementById('new-cuenta-tipo').value;
-        const saldo = parseFloat(document.getElementById('new-cuenta-saldo').value);
+    abrirEditarCuenta(id) {
+        const cuenta = app.cuentas.find(c => c.id === id);
+        const nuevoNombre = prompt(`Editar nombre de cuenta:\n\nNombre actual: ${cuenta.nombre}`, cuenta.nombre);
         
-        if (!nombre || !saldo) { alert('Completa todos los campos'); return; }
-        
-        app.cuentas.push({ id: Date.now(), nombre, tipo, saldo, oculto: false });
-        document.getElementById('new-cuenta-nombre').value = '';
-        document.getElementById('new-cuenta-saldo').value = '';
-        this.renderizar();
+        if (nuevoNombre && nuevoNombre.trim()) {
+            app.editarCuenta(id, nuevoNombre);
+            this.renderizar();
+            alert('✅ Cuenta actualizada');
+        }
     },
     
     toggleOcultar(id) {
-        const c = app.cuentas.find(x => x.id === id);
-        if (c) c.oculto = !c.oculto;
-        this.renderizar();
+        const cuenta = app.cuentas.find(c => c.id === id);
+        if (cuenta) {
+            cuenta.oculto = !cuenta.oculto;
+            this.renderizar();
+        }
     },
     
-    eliminar(id) {
-        if (confirm('¿Eliminar esta cuenta?')) {
-            app.cuentas = app.cuentas.filter(x => x.id !== id);
+    archivarCuenta(id) {
+        const cuenta = app.cuentas.find(c => c.id === id);
+        if (confirm(`¿Archivar cuenta "${cuenta.nombre}"?\n\nSus transacciones se mantendrán en el historial.`)) {
+            app.archivarCuenta(id);
             this.renderizar();
+            alert('✅ Cuenta archivada');
+        }
+    },
+    
+    desarchivarCuenta(id) {
+        const cuenta = app.cuentas.find(c => c.id === id);
+        if (confirm(`¿Restaurar cuenta "${cuenta.nombre}"?`)) {
+            app.archivarCuenta(id);
+            this.renderizar();
+            alert('✅ Cuenta restaurada');
         }
     }
 };

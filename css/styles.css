@@ -48,17 +48,38 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', san
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .btn-primary { background: linear-gradient(135deg, #6ba59a 0%, #5a9183 100%); color: white; border: none; padding: 1rem 2rem; border-radius: 1rem; font-weight: 700; cursor: pointer; width: 100%; }
 .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(107, 165, 154, 0.3); }
-.btn-sm { padding: 0.5rem; border: none; border-radius: 0.8rem; font-size: 0.85rem; cursor: pointer; }
+.btn-sm { padding: 0.5rem 0.8rem; border: none; border-radius: 0.8rem; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
 .btn-edit { background: #d4a574; color: white; }
+.btn-edit:hover { background: #c4954a; }
 .btn-delete { background: #e88a7e; color: white; }
+.btn-delete:hover { background: #d87563; }
+.btn-hide { background: #6ba59a; color: white; }
+.btn-hide:hover { background: #5a9183; }
+.btn-archive { background: #f6a192; color: white; }
+.btn-archive:hover { background: #e88a7e; }
+.btn-restore { background: #6ba59a; color: white; }
+.btn-restore:hover { background: #5a9183; }
+.btn-toggle { background: #6ba59a; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 1rem; font-weight: 700; cursor: pointer; }
+.btn-toggle:hover { background: #5a9183; }
 .cuenta-card { background: linear-gradient(135deg, rgba(107, 165, 154, 0.1) 0%, rgba(212, 165, 116, 0.05) 100%); border: 2px solid rgba(107, 165, 154, 0.2); border-radius: 1.5rem; padding: 1.8rem; }
-.cuenta-nombre { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; }
+.cuenta-nombre { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+.cuenta-tipo { font-size: 0.85rem; color: #8b9693; margin-bottom: 0.5rem; }
 .cuenta-saldo { font-family: 'Courier Prime', monospace; font-size: 2rem; font-weight: 700; color: #6ba59a; margin-bottom: 1rem; }
-.cuenta-botones { display: flex; gap: 0.5rem; margin-top: 1rem; }
+.cuenta-botones { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
 .hidden { display: none !important; }
 .progress-bar { width: 100%; height: 8px; background: rgba(107, 165, 154, 0.2); border-radius: 10px; margin-top: 1rem; overflow: hidden; }
 .progress-fill { height: 100%; background: linear-gradient(90deg, #6ba59a 0%, #d4a574 100%); }
 .categoria { display: inline-block; padding: 0.3rem 0.8rem; background: rgba(107, 165, 154, 0.15); border-radius: 0.8rem; font-size: 0.85rem; color: #6ba59a; margin-right: 0.3rem; }
+
+/* ===== FILTROS DE TRANSACCIONES ===== */
+.filtros-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.filtro-grupo { display: flex; flex-direction: column; }
+.filtro-label { font-weight: 700; margin-bottom: 0.5rem; font-size: 0.9rem; }
+.filtro-select { padding: 0.8rem 1rem; border: 2px solid rgba(107, 165, 154, 0.2); border-radius: 0.8rem; font-size: 0.95rem; }
+.filtro-select:focus { outline: none; border-color: #6ba59a; box-shadow: 0 0 0 4px rgba(107, 165, 154, 0.1); }
+.btn-filtro-limpiar { background: #6ba59a; color: white; border: none; padding: 0.8rem 1rem; border-radius: 0.8rem; font-weight: 700; cursor: pointer; width: 100%; }
+.btn-filtro-limpiar:hover { background: #5a9183; }
+.transacciones-lista { display: flex; flex-direction: column; }
 
 /* ===== CONFIGURACIÓN DE CATEGORÍAS ===== */
 .tabs-config { display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid rgba(107, 165, 154, 0.1); }
@@ -84,7 +105,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', san
 .modal-tab-btn.active { color: #6ba59a; border-bottom-color: #6ba59a; }
 .modal-tab { padding: 1.5rem 0; }
 
-/* ===== CALCULADORA NUEVA ===== */
+/* ===== CALCULADORA ===== */
 .calculadora-box { margin: 2rem 0; }
 .calc-display { width: 100%; padding: 1rem; font-size: 1.8rem; font-family: 'Courier Prime', monospace; text-align: right; border: 2px solid rgba(107, 165, 154, 0.3); border-radius: 1rem; margin-bottom: 1rem; background: #f9f9f9; font-weight: 700; color: #2d3e3b; }
 
@@ -110,4 +131,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', san
     .modal-container { max-width: 95%; padding: 1.5rem; }
     .fab-button { width: 50px; height: 50px; font-size: 1.5rem; bottom: 1.5rem; right: 1.5rem; }
     .categorias-list { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .filtros-grid { grid-template-columns: 1fr; }
 }

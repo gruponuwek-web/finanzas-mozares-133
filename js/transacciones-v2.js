@@ -1,124 +1,107 @@
 const transacciones = {
+    filtros: {
+        tipo: 'Todos',
+        categoria: 'Todas',
+        cuenta: 'Todas',
+        fechaInicio: null,
+        fechaFin: null
+    },
+    
     renderizar() {
-        const categorias = [...new Set(app.presupuestos.map(p => p.categoria))];
-        
         let html = `
             <div class="card">
-                <h3 class="card-titulo">➕ Registrar transacción</h3>
-                <div class="form-row">
-                    <div class="form-grupo">
-                        <label class="form-label">Tipo</label>
-                        <select class="form-select" id="new-trans-tipo" onchange="transacciones.actualizarCategorias()">
+                <h3 class="card-titulo">🔍 Filtros recomendados</h3>
+                <div class="filtros-grid">
+                    <div class="filtro-grupo">
+                        <label class="filtro-label">Tipo</label>
+                        <select class="filtro-select" onchange="transacciones.filtros.tipo = this.value; transacciones.renderizar();">
+                            <option value="Todos" selected>Todos</option>
                             <option value="Gasto">Gasto</option>
                             <option value="Obligatoria">Obligatoria</option>
-                            <option value="Transferencia">Transferencia</option>
                             <option value="Depósito">Depósito</option>
+                            <option value="Transferencia">Transferencia</option>
                         </select>
                     </div>
-                    <div class="form-grupo">
-                        <label class="form-label">Categoría</label>
-                        <select class="form-select" id="new-trans-cat">
-                            ${categorias.map(c => `<option value="${c}">${c}</option>`).join('')}
-                            <option value="Otra">Otra</option>
+                    <div class="filtro-grupo">
+                        <label class="filtro-label">Categoría</label>
+                        <select class="filtro-select" onchange="transacciones.filtros.categoria = this.value; transacciones.renderizar();">
+                            <option value="Todas" selected>Todas</option>
+                            ${app.categorias.ingresos.map(c => `<option value="${c.nombre}">${c.nombre}</option>`).join('')}
+                            ${app.categorias.egresos.map(c => `<option value="${c.nombre}">${c.nombre}</option>`).join('')}
                         </select>
                     </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-grupo">
-                        <label class="form-label">Monto</label>
-                        <input type="number" class="form-input" id="new-trans-monto" placeholder="0.00">
+                    <div class="filtro-grupo">
+                        <label class="filtro-label">Cuenta</label>
+                        <select class="filtro-select" onchange="transacciones.filtros.cuenta = this.value; transacciones.renderizar();">
+                            <option value="Todas" selected>Todas</option>
+                            ${app.cuentas.filter(c => !c.archivado).map(c => `<option value="${c.nombre}">${c.nombre}</option>`).join('')}
+                        </select>
                     </div>
-                    <div class="form-grupo">
-                        <label class="form-label">Fecha</label>
-                        <input type="date" class="form-input" id="new-trans-fecha">
+                    <div class="filtro-grupo">
+                        <label class="filtro-label">Limpiar filtros</label>
+                        <button class="btn-filtro-limpiar" onclick="transacciones.limpiarFiltros()">🔄 Limpiar</button>
                     </div>
                 </div>
-                <div class="form-grupo">
-                    <label class="form-label">Descripción</label>
-                    <input type="text" class="form-input" id="new-trans-desc" placeholder="Ej: Supermercado">
-                </div>
-                <button class="btn-primary" onclick="transacciones.agregar()">Registrar</button>
             </div>
         `;
         
-        html += '<div class="card"><h3 class="card-titulo">📋 Historial de transacciones</h3>';
+        const transaccionesFiltradas = this.aplicarFiltros();
         
-        app.transacciones.forEach(t => {
-            const iconos = { Gasto: '📉', Obligatoria: '📌', Transferencia: '↔️', Depósito: '📈' };
-            const clases = { Gasto: 'monto-gasto', Obligatoria: 'monto-obligatoria', Transferencia: 'monto-transferencia', Depósito: 'monto-deposito' };
-            const signo = ['Depósito', 'Transferencia'].includes(t.tipo) ? '+' : '-';
-            
-            const mes = t.fecha.slice(0, 7);
-            const presupuestoCategoria = app.presupuestos.find(p => p.mes === mes && p.categoria === t.categoria);
-            const excedido = presupuestoCategoria && t.monto > presupuestoCategoria.monto;
-            
-            html += `
-                <div class="transaccion-item" style="border-left: 4px solid ${excedido ? '#e88a7e' : '#6ba59a'};">
-                    <div class="transaccion-info">
-                        <p class="transaccion-tipo">${iconos[t.tipo]} ${t.desc} ${excedido ? '⚠️' : ''}</p>
-                        <p class="transaccion-fecha">${t.fecha} • ${t.categoria}</p>
+        html += `<div class="card">
+            <h3 class="card-titulo">📝 Historial de Transacciones (${transaccionesFiltradas.length})</h3>`;
+        
+        if (transaccionesFiltradas.length === 0) {
+            html += '<p style="color: #8b9693; text-align: center; padding: 2rem;">Sin transacciones</p>';
+        } else {
+            html += '<div class="transacciones-lista">';
+            transaccionesFiltradas.forEach(t => {
+                const icono = t.tipo === 'Gasto' ? '📉' : t.tipo === 'Obligatoria' ? '📋' : t.tipo === 'Depósito' ? '💰' : '↔️';
+                const clase = t.tipo === 'Gasto' ? 'monto-gasto' : t.tipo === 'Obligatoria' ? 'monto-obligatoria' : t.tipo === 'Depósito' ? 'monto-deposito' : 'monto-transferencia';
+                
+                html += `
+                    <div class="transaccion-item">
+                        <div class="transaccion-info">
+                            <p class="transaccion-tipo">${icono} ${t.tipo} - ${t.categoria}</p>
+                            <p class="transaccion-fecha">${t.fecha} | ${t.desc}</p>
+                            <p style="font-size: 0.85rem; color: #8b9693; margin-top: 0.3rem;">💳 ${t.cuenta || 'Sin cuenta'}</p>
+                        </div>
+                        <div class="transaccion-monto ${clase}">$${t.monto.toLocaleString('es-MX')}</div>
                     </div>
-                    <div style="text-align: right;">
-                        <p class="transaccion-monto ${clases[t.tipo]}">${signo}$${t.monto.toLocaleString('es-MX')}</p>
-                        <button class="btn-sm btn-delete" onclick="transacciones.eliminar(${t.id})" style="width: auto; padding: 0.3rem 0.6rem; font-size: 0.75rem; margin-top: 0.3rem;">Eliminar</button>
-                    </div>
-                </div>
-            `;
-        });
+                `;
+            });
+            html += '</div>';
+        }
         
         html += '</div>';
-        
         document.getElementById('transacciones-container').innerHTML = html;
-        document.getElementById('new-trans-fecha').valueAsDate = new Date();
     },
     
-    actualizarCategorias() {
+    aplicarFiltros() {
+        let resultado = app.transacciones;
+        
+        if (this.filtros.tipo !== 'Todos') {
+            resultado = resultado.filter(t => t.tipo === this.filtros.tipo);
+        }
+        
+        if (this.filtros.categoria !== 'Todas') {
+            resultado = resultado.filter(t => t.categoria === this.filtros.categoria);
+        }
+        
+        if (this.filtros.cuenta !== 'Todas') {
+            resultado = resultado.filter(t => t.cuenta === this.filtros.cuenta);
+        }
+        
+        return resultado.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    },
+    
+    limpiarFiltros() {
+        this.filtros = {
+            tipo: 'Todos',
+            categoria: 'Todas',
+            cuenta: 'Todas',
+            fechaInicio: null,
+            fechaFin: null
+        };
         this.renderizar();
-    },
-    
-    agregar() {
-        const tipo = document.getElementById('new-trans-tipo').value;
-        const categoria = document.getElementById('new-trans-cat').value;
-        const monto = parseFloat(document.getElementById('new-trans-monto').value);
-        const fecha = document.getElementById('new-trans-fecha').value;
-        const desc = document.getElementById('new-trans-desc').value;
-        
-        if (!tipo || !monto || !fecha || !desc) {
-            alert('Completa todos los campos');
-            return;
-        }
-        
-        const mes = fecha.slice(0, 7);
-        const presupuestoCategoria = app.presupuestos.find(p => p.mes === mes && p.categoria === categoria);
-        
-        if (presupuestoCategoria && monto > presupuestoCategoria.monto) {
-            const confirm_ = confirm(`⚠️ ALERTA: Excedes el presupuesto de ${categoria}\nPresupuestado: $${presupuestoCategoria.monto.toLocaleString('es-MX')}\nMonto: $${monto.toLocaleString('es-MX')}\n\n¿Continuar de todas formas?`);
-            if (!confirm_) return;
-        }
-        
-        app.transacciones.unshift({
-            id: Date.now(),
-            tipo,
-            categoria,
-            monto,
-            fecha,
-            desc
-        });
-        
-        gssync.guardarTransaccion({ tipo, categoria, monto, fecha, desc });
-        
-        document.getElementById('new-trans-monto').value = '';
-        document.getElementById('new-trans-desc').value = '';
-        
-        this.renderizar();
-        dashboard.renderizar();
-    },
-    
-    eliminar(id) {
-        if (confirm('¿Eliminar esta transacción?')) {
-            app.transacciones = app.transacciones.filter(t => t.id !== id);
-            this.renderizar();
-            dashboard.renderizar();
-        }
     }
 };

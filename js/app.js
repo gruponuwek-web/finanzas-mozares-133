@@ -30,15 +30,15 @@ const app = {
     },
     
     cuentas: [
-        { id: 1, nombre: 'Débito Él', tipo: 'Débito', saldo: 15000, oculto: false },
-        { id: 2, nombre: 'Débito Ella', tipo: 'Débito', saldo: 12000, oculto: false },
-        { id: 3, nombre: 'Ahorros Familia', tipo: 'Ahorros', saldo: 50000, oculto: false },
+        { id: 1, nombre: 'Débito Él', tipo: 'Débito', saldo: 15000, oculto: false, archivado: false },
+        { id: 2, nombre: 'Débito Ella', tipo: 'Débito', saldo: 12000, oculto: false, archivado: false },
+        { id: 3, nombre: 'Ahorros Familia', tipo: 'Ahorros', saldo: 50000, oculto: false, archivado: false },
     ],
     
     transacciones: [
-        { id: 1, tipo: 'Gasto', categoria: 'Alimentación', monto: 500, desc: 'Supermercado', fecha: '2026-06-08' },
-        { id: 2, tipo: 'Depósito', categoria: 'Salario', monto: 2000, desc: 'Pago trabajo', fecha: '2026-06-07' },
-        { id: 3, tipo: 'Obligatoria', categoria: 'Servicios', monto: 800, desc: 'Luz y agua', fecha: '2026-06-06' },
+        { id: 1, tipo: 'Gasto', categoria: 'Alimentación', monto: 500, desc: 'Supermercado', fecha: '2026-06-08', cuenta: 'Débito Él' },
+        { id: 2, tipo: 'Depósito', categoria: 'Salario', monto: 2000, desc: 'Pago trabajo', fecha: '2026-06-07', cuenta: 'Débito Ella' },
+        { id: 3, tipo: 'Obligatoria', categoria: 'Servicios', monto: 800, desc: 'Luz y agua', fecha: '2026-06-06', cuenta: 'Débito Él' },
     ],
     
     presupuestos: [
@@ -99,6 +99,16 @@ const app = {
     
     eliminarCategoria(tipo, id) {
         app.categorias[tipo] = app.categorias[tipo].filter(c => c.id !== id);
+    },
+    
+    editarCuenta(id, nombre) {
+        const cuenta = app.cuentas.find(c => c.id === id);
+        if (cuenta) cuenta.nombre = nombre;
+    },
+    
+    archivarCuenta(id) {
+        const cuenta = app.cuentas.find(c => c.id === id);
+        if (cuenta) cuenta.archivado = !cuenta.archivado;
     }
 };
 
