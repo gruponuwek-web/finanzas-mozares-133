@@ -228,54 +228,18 @@ const presupuesto = {
     },
     
     abrirAgregarPresupuesto() {
-        let html = `
-            <div class="modal-overlay" id="modal-agregar-pres">
-                <div class="modal-container">
-                    <div class="modal-header">
-                        <h2>➕ Agregar Presupuestos</h2>
-                        <button class="modal-close" onclick="document.getElementById('modal-agregar-pres').remove()">✕</button>
-                    </div>
-                    <div class="modal-tab" style="padding: 1.5rem 0;">
-                        <p style="margin-bottom: 1.5rem; font-weight: 700;">Selecciona las categorías que deseas presupuestar:</p>
-                        <div class="checkbox-grid">
-        `;
-        
-        app.categorias.egresos.forEach(cat => {
-            const estaAgregado = app.presupuestos.some(p => p.categoria === cat.nombre);
-            html += `
-                <label class="checkbox-item">
-                    <input type="checkbox" value="${cat.nombre}" ${estaAgregado ? 'disabled checked' : ''}>
-                    <span>${cat.nombre} ${estaAgregado ? '(Agregado)' : ''}</span>
-                </label>
-            `;
+        // Navega a la página de configuración
+        document.querySelectorAll('.content').forEach(e => e.classList.add('hidden'));
+        document.querySelectorAll('.navbar-btn').forEach(e => e.classList.remove('active'));
+        document.getElementById('configuracion-pres').classList.remove('hidden');
+        // Marcar el botón correcto en navbar
+        const btns = document.querySelectorAll('.navbar-btn');
+        btns.forEach((btn, idx) => {
+            if (btn.textContent.includes('Presupuesto')) {
+                btn.classList.add('active');
+            }
         });
-        
-        html += `
-                        </div>
-                        <button class="btn-primary" style="margin-top: 2rem;" onclick="presupuesto.guardarNuevosPresupuestos()">Agregar Seleccionados</button>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        document.body.insertAdjacentHTML('beforeend', html);
-    },
-    
-    guardarNuevosPresupuestos() {
-        const seleccionados = Array.from(document.querySelectorAll('#modal-agregar-pres input[type="checkbox"]:checked'))
-            .map(cb => cb.value)
-            .map(nombre => app.categorias.egresos.find(c => c.nombre === nombre))
-            .filter(c => c && !app.presupuestos.some(p => p.categoria === c.nombre));
-        
-        if (seleccionados.length === 0) {
-            alert('Selecciona al menos una categoría');
-            return;
-        }
-        
-        app.agregarPresupuesto(seleccionados);
-        document.getElementById('modal-agregar-pres').remove();
-        presupuesto.renderizar();
-        alert('✅ Presupuestos agregados');
+        configurarPresupuesto.renderizar();
     },
     
     abrirEditarPresupuesto(id) {
