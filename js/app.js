@@ -42,9 +42,30 @@ const app = {
     ],
     
     presupuestos: [
-        { id: 1, mes: '2026-06', categoria: 'Alimentación', monto: 1500, estado: 'Activo' },
-        { id: 2, mes: '2026-06', categoria: 'Transporte', monto: 500, estado: 'Activo' },
-        { id: 3, mes: '2026-06', categoria: 'Servicios', monto: 1000, estado: 'Activo' },
+        {
+            id: 1,
+            categoria: 'Digital',
+            concepto: 'Netflix',
+            cuentaAsignada: 'Ahorros Familia',
+            asignadoA: 'familiar',
+            meses: { '2026-01': 0, '2026-02': 0, '2026-03': 0, '2026-04': 0, '2026-05': 0, '2026-06': 349, '2026-07': 349, '2026-08': 349, '2026-09': 0, '2026-10': 0, '2026-11': 0, '2026-12': 0 }
+        },
+        {
+            id: 2,
+            categoria: 'Servicios',
+            concepto: 'Luz',
+            cuentaAsignada: 'Débito Él',
+            asignadoA: 'familiar',
+            meses: { '2026-01': 0, '2026-02': 0, '2026-03': 0, '2026-04': 0, '2026-05': 0, '2026-06': 1200, '2026-07': 1200, '2026-08': 1200, '2026-09': 0, '2026-10': 0, '2026-11': 0, '2026-12': 0 }
+        },
+        {
+            id: 3,
+            categoria: 'Transporte',
+            concepto: 'Gasolina',
+            cuentaAsignada: 'Débito Él',
+            asignadoA: 'él',
+            meses: { '2026-01': 0, '2026-02': 0, '2026-03': 0, '2026-04': 0, '2026-05': 0, '2026-06': 500, '2026-07': 500, '2026-08': 500, '2026-09': 0, '2026-10': 0, '2026-11': 0, '2026-12': 0 }
+        }
     ],
     
     init() {
@@ -121,6 +142,34 @@ const app = {
     archivarCuenta(id) {
         const cuenta = app.cuentas.find(c => c.id === id);
         if (cuenta) cuenta.archivado = !cuenta.archivado;
+    },
+    
+    agregarPresupuesto(conceptos) {
+        const maxId = Math.max(...app.presupuestos.map(p => p.id), 0);
+        const mesesVacios = {};
+        for (let i = 1; i <= 12; i++) {
+            mesesVacios[`2026-${String(i).padStart(2, '0')}`] = 0;
+        }
+        
+        conceptos.forEach(concepto => {
+            app.presupuestos.push({
+                id: maxId + app.presupuestos.length,
+                categoria: concepto.categoria,
+                concepto: concepto.nombre,
+                cuentaAsignada: '',
+                asignadoA: 'familiar',
+                meses: { ...mesesVacios }
+            });
+        });
+    },
+    
+    actualizarPresupuesto(id, cuentaAsignada, asignadoA, meses) {
+        const presupuesto = app.presupuestos.find(p => p.id === id);
+        if (presupuesto) {
+            presupuesto.cuentaAsignada = cuentaAsignada;
+            presupuesto.asignadoA = asignadoA;
+            presupuesto.meses = meses;
+        }
     }
 };
 
