@@ -136,37 +136,57 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', san
 }
 
 /* ===== PRESUPUESTOS V3 ===== */
-.presupuesto-tabs { display: flex; gap: 1rem; border-bottom: 2px solid rgba(107, 165, 154, 0.1); margin-bottom: 1.5rem; }
-.presupuesto-tab-btn { background: none; border: none; padding: 1rem; font-weight: 700; color: #8b9693; cursor: pointer; transition: all 0.3s; border-bottom: 3px solid transparent; }
+.presupuesto-header { display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap; }
+.presupuesto-tabs { display: flex; gap: 1rem; }
+.presupuesto-tab-btn { background: none; border: none; padding: 0.8rem 1.2rem; font-weight: 700; color: #8b9693; cursor: pointer; transition: all 0.3s; border-bottom: 3px solid transparent; }
 .presupuesto-tab-btn.active { color: #6ba59a; border-bottom-color: #6ba59a; }
 
-.navegacion-meses { display: flex; align-items: center; justify-content: center; gap: 2rem; margin: 1.5rem 0; }
-.btn-mes { background: #6ba59a; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 0.8rem; font-weight: 700; cursor: pointer; }
-.btn-mes:hover { background: #5a9183; }
-.rango-meses { font-weight: 700; font-size: 1.1rem; min-width: 200px; text-align: center; }
+.navegacion-meses-compacta { display: flex; align-items: center; justify-content: center; gap: 1rem; }
+.btn-mes-pequeño { background: #6ba59a; color: white; border: none; padding: 0.6rem 1rem; border-radius: 0.6rem; font-weight: 700; cursor: pointer; font-size: 0.9rem; }
+.btn-mes-pequeño:hover { background: #5a9183; }
+.rango-meses-pequeño { font-weight: 700; font-size: 0.95rem; min-width: 150px; text-align: center; }
 
 .tabla-presupuestos { width: 100%; border-collapse: collapse; }
-.tabla-presupuestos th { background: rgba(107, 165, 154, 0.1); padding: 1rem; text-align: left; font-weight: 700; border-bottom: 2px solid rgba(107, 165, 154, 0.2); font-size: 0.9rem; }
-.tabla-presupuestos td { padding: 1rem; border-bottom: 1px solid rgba(107, 165, 154, 0.1); }
+.tabla-presupuestos th { background: rgba(107, 165, 154, 0.1); padding: 0.9rem; text-align: left; font-weight: 700; border-bottom: 2px solid rgba(107, 165, 154, 0.2); font-size: 0.9rem; }
+.tabla-presupuestos td { padding: 0.9rem; border-bottom: 1px solid rgba(107, 165, 154, 0.1); }
 
-.resumen-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-.resumen-card { background: white; border-radius: 1.2rem; padding: 1.8rem; border: 2px solid rgba(107, 165, 154, 0.15); }
-.resumen-card h4 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+.resumen-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+.resumen-card { background: white; border-radius: 1.2rem; padding: 1.5rem; border: 2px solid rgba(107, 165, 154, 0.15); }
+.resumen-card h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; }
 
 .resumen-el { border-left: 4px solid #4a90e2; }
 .resumen-ella { border-left: 4px solid #f6a192; }
 .resumen-familiar { border-left: 4px solid #6ba59a; }
 
-.resumen-items { margin-bottom: 1.5rem; max-height: 300px; overflow-y: auto; }
-.resumen-item { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid rgba(107, 165, 154, 0.1); font-size: 0.95rem; }
+.resumen-items { margin-bottom: 1.2rem; max-height: 250px; overflow-y: auto; }
+.resumen-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(107, 165, 154, 0.1); font-size: 0.9rem; }
 .resumen-item:last-child { border-bottom: none; }
 
-.resumen-total { padding: 1rem; background: rgba(107, 165, 154, 0.05); border-radius: 0.8rem; display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
+.resumen-total { padding: 0.9rem; background: rgba(107, 165, 154, 0.05); border-radius: 0.6rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
 
-.resumen-total-general { background: linear-gradient(135deg, rgba(107, 165, 154, 0.1) 0%, rgba(212, 165, 116, 0.05) 100%); border: 2px solid rgba(107, 165, 154, 0.2); border-radius: 1rem; padding: 2rem; display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; }
+.resumen-total-general { background: linear-gradient(135deg, rgba(107, 165, 154, 0.1) 0%, rgba(212, 165, 116, 0.05) 100%); border: 2px solid rgba(107, 165, 154, 0.2); border-radius: 1rem; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; }
+
+/* ===== CHECKBOX GRID ===== */
+.checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.checkbox-item { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; padding: 0.8rem; background: rgba(107, 165, 154, 0.05); border-radius: 0.6rem; }
+.checkbox-item input[type="checkbox"] { cursor: pointer; }
+.checkbox-item input[type="checkbox"]:disabled { cursor: not-allowed; opacity: 0.5; }
+
+/* ===== MESES GRID ===== */
+.meses-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; }
+.mes-input-grupo { display: flex; flex-direction: column; }
+.mes-input-grupo label { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.4rem; }
+.mes-input { padding: 0.6rem; border: 2px solid rgba(107, 165, 154, 0.2); border-radius: 0.6rem; font-size: 0.9rem; }
+.mes-input:focus { outline: none; border-color: #6ba59a; box-shadow: 0 0 0 4px rgba(107, 165, 154, 0.1); }
+
+@media (max-width: 1024px) {
+    .presupuesto-header { flex-direction: column; align-items: flex-start; }
+    .navegacion-meses-compacta { width: 100%; }
+}
 
 @media (max-width: 768px) {
     .resumen-grid { grid-template-columns: 1fr; }
     .tabla-presupuestos { font-size: 0.85rem; }
     .tabla-presupuestos th, .tabla-presupuestos td { padding: 0.6rem; }
+    .checkbox-grid { grid-template-columns: 1fr; }
 }

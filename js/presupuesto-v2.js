@@ -1,21 +1,32 @@
 const presupuesto = {
     pestanaActual: 'conceptos',
     mesInicio: 5, // 0=enero, 5=junio
+    meses: ['2026-01', '2026-02', '2026-03', '2026-04', '2026-05', '2026-06', '2026-07', '2026-08', '2026-09', '2026-10', '2026-11', '2026-12'],
     
     renderizar() {
+        const mesesVisibles = this.obtenerMesesVisibles();
+        const mesLabels = mesesVisibles.map(m => this.formatearMes(m));
+        
         let html = `
             <div class="card">
-                <div class="presupuesto-tabs">
-                    <button class="presupuesto-tab-btn ${this.pestanaActual === 'conceptos' ? 'active' : ''}" onclick="presupuesto.cambiarPestana('conceptos')">📊 Conceptos</button>
-                    <button class="presupuesto-tab-btn ${this.pestanaActual === 'resumen' ? 'active' : ''}" onclick="presupuesto.cambiarPestana('resumen')">👥 Resumen por Persona</button>
+                <div class="presupuesto-header">
+                    <div class="presupuesto-tabs">
+                        <button class="presupuesto-tab-btn ${this.pestanaActual === 'conceptos' ? 'active' : ''}" onclick="presupuesto.cambiarPestana('conceptos')">📊 Conceptos</button>
+                        <button class="presupuesto-tab-btn ${this.pestanaActual === 'resumen' ? 'active' : ''}" onclick="presupuesto.cambiarPestana('resumen')">👥 Resumen por Persona</button>
+                    </div>
+                    <div class="navegacion-meses-compacta">
+                        <button class="btn-mes-pequeño" onclick="presupuesto.mesAnterior()">◀</button>
+                        <span class="rango-meses-pequeño">${mesLabels[0]} - ${mesLabels[2]}</span>
+                        <button class="btn-mes-pequeño" onclick="presupuesto.mesSiguiente()">▶</button>
+                    </div>
                 </div>
             </div>
         `;
         
         if (this.pestanaActual === 'conceptos') {
-            html += this.renderizarConceptos();
+            html += this.renderizarConceptos(mesesVisibles, mesLabels);
         } else {
-            html += this.renderizarResumen();
+            html += this.renderizarResumen(mesesVisibles, mesLabels);
         }
         
         document.getElementById('presupuesto-container').innerHTML = html;
@@ -26,22 +37,8 @@ const presupuesto = {
         this.renderizar();
     },
     
-    renderizarConceptos() {
-        const meses = this.obtenerMesesVisibles();
-        const mesLabels = meses.map(m => this.formatearMes(m));
-        
+    renderizarConceptos(mesesVisibles, mesLabels) {
         let html = `
-            <div class="card">
-                <h3 class="card-titulo">📋 Conceptos Presupuestados</h3>
-                <div class="navegacion-meses">
-                    <button class="btn-mes" onclick="presupuesto.mesAnterior()">◀ Anterior</button>
-                    <span class="rango-meses">${mesLabels[0]} - ${mesLabels[2]}</span>
-                    <button class="btn-mes" onclick="presupuesto.mesSiguiente()">Siguiente ▶</button>
-                </div>
-            </div>
-        `;
-        
-        html += `
             <div class="card">
                 <table class="tabla-presupuestos">
                     <thead>
@@ -59,9 +56,9 @@ const presupuesto = {
         `;
         
         app.presupuestos.forEach(p => {
-            const val1 = p.meses[meses[0]] || 0;
-            const val2 = p.meses[meses[1]] || 0;
-            const val3 = p.meses[meses[2]] || 0;
+            const val1 = p.meses[mesesVisibles[0]] || 0;
+            const val2 = p.meses[mesesVisibles[1]] || 0;
+            const val3 = p.meses[mesesVisibles[2]] || 0;
             
             html += `
                 <tr>
@@ -88,15 +85,12 @@ const presupuesto = {
         return html;
     },
     
-    renderizarResumen() {
-        const mesInicio = this.meses[this.mesInicio];
-        const mesFin = this.meses[(this.mesInicio + 2) % 12];
-        
-        const resumen = this.calcularResumenPorPersona();
+    renderizarResumen(mesesVisibles, mesLabels) {
+        const resumen = this.calcularResumenPorPersona(mesesVisibles);
         
         let html = `
             <div class="card">
-                <h3 class="card-titulo">👥 Resumen de Presupuestos (${this.formatearMes(this.meses[this.mesInicio])} - ${this.formatearMes(this.meses[(this.mesInicio + 2) % 12])})</h3>
+                <h3 class="card-titulo">👥 Resumen de Presupuestos (${mesLabels[0]} - ${mesLabels[2]})</h3>
                 
                 <div class="resumen-grid">
                     <div class="resumen-card resumen-el">
@@ -114,8 +108,8 @@ const presupuesto = {
         html += `
                         </div>
                         <div class="resumen-total">
-                            <strong>Subtotal Él:</strong>
-                            <span style="font-family: 'Courier Prime'; font-size: 1.3rem; color: #4a90e2;">$${resumen.él.total.toLocaleString('es-MX')}</span>
+                            <strong>Subtotal:</strong>
+                            <span style="font-family: 'Courier Prime'; font-weight: 700; color: #4a90e2;">$${resumen.él.total.toLocaleString('es-MX')}</span>
                         </div>
                     </div>
                     
@@ -134,8 +128,8 @@ const presupuesto = {
         html += `
                         </div>
                         <div class="resumen-total">
-                            <strong>Subtotal Ella:</strong>
-                            <span style="font-family: 'Courier Prime'; font-size: 1.3rem; color: #f6a192;">$${resumen.ella.total.toLocaleString('es-MX')}</span>
+                            <strong>Subtotal:</strong>
+                            <span style="font-family: 'Courier Prime'; font-weight: 700; color: #f6a192;">$${resumen.ella.total.toLocaleString('es-MX')}</span>
                         </div>
                     </div>
                     
@@ -154,8 +148,8 @@ const presupuesto = {
         html += `
                         </div>
                         <div class="resumen-total">
-                            <strong>Subtotal Familiar:</strong>
-                            <span style="font-family: 'Courier Prime'; font-size: 1.3rem; color: #6ba59a;">$${resumen.familiar.total.toLocaleString('es-MX')}</span>
+                            <strong>Subtotal:</strong>
+                            <span style="font-family: 'Courier Prime'; font-weight: 700; color: #6ba59a;">$${resumen.familiar.total.toLocaleString('es-MX')}</span>
                         </div>
                     </div>
                 </div>
@@ -170,45 +164,57 @@ const presupuesto = {
         return html;
     },
     
-    calcularResumenPorPersona() {
-        const meses = this.obtenerMesesVisibles();
-        const promedio = meses.map(m => app.presupuestos.reduce((sum, p) => sum + (p.meses[m] || 0), 0));
-        const montoPromedio = Math.round(promedio.reduce((a, b) => a + b) / 3);
+    calcularResumenPorPersona(mesesVisibles) {
+        const montos = mesesVisibles.map(m => 
+            app.presupuestos.reduce((sum, p) => sum + (p.meses[m] || 0), 0)
+        );
         
         return {
             él: {
                 items: app.presupuestos.filter(p => p.asignadoA === 'él').map(p => ({
                     concepto: p.concepto,
-                    monto: montoPromedio
+                    monto: Math.round(montos.reduce((a, b) => a + b) / 3)
                 })),
-                total: app.presupuestos.filter(p => p.asignadoA === 'él').length * montoPromedio
+                total: app.presupuestos.filter(p => p.asignadoA === 'él').reduce((sum, p) => {
+                    const promedio = Math.round(mesesVisibles.map(m => p.meses[m] || 0).reduce((a, b) => a + b) / 3);
+                    return sum + promedio;
+                }, 0)
             },
             ella: {
                 items: app.presupuestos.filter(p => p.asignadoA === 'ella').map(p => ({
                     concepto: p.concepto,
-                    monto: montoPromedio
+                    monto: Math.round(mesesVisibles.map(m => p.meses[m] || 0).reduce((a, b) => a + b) / 3)
                 })),
-                total: app.presupuestos.filter(p => p.asignadoA === 'ella').length * montoPromedio
+                total: app.presupuestos.filter(p => p.asignadoA === 'ella').reduce((sum, p) => {
+                    const promedio = Math.round(mesesVisibles.map(m => p.meses[m] || 0).reduce((a, b) => a + b) / 3);
+                    return sum + promedio;
+                }, 0)
             },
             familiar: {
                 items: app.presupuestos.filter(p => p.asignadoA === 'familiar').map(p => ({
                     concepto: p.concepto,
-                    monto: montoPromedio
+                    monto: Math.round(mesesVisibles.map(m => p.meses[m] || 0).reduce((a, b) => a + b) / 3)
                 })),
-                total: app.presupuestos.filter(p => p.asignadoA === 'familiar').length * montoPromedio
+                total: app.presupuestos.filter(p => p.asignadoA === 'familiar').reduce((sum, p) => {
+                    const promedio = Math.round(mesesVisibles.map(m => p.meses[m] || 0).reduce((a, b) => a + b) / 3);
+                    return sum + promedio;
+                }, 0)
             }
         };
     },
     
     obtenerMesesVisibles() {
-        const meses = ['2026-01', '2026-02', '2026-03', '2026-04', '2026-05', '2026-06', '2026-07', '2026-08', '2026-09', '2026-10', '2026-11', '2026-12'];
-        return [meses[this.mesInicio], meses[(this.mesInicio + 1) % 12], meses[(this.mesInicio + 2) % 12]];
+        return [
+            this.meses[this.mesInicio],
+            this.meses[(this.mesInicio + 1) % 12],
+            this.meses[(this.mesInicio + 2) % 12]
+        ];
     },
     
     formatearMes(mes) {
-        const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        const mesesNombres = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         const num = parseInt(mes.split('-')[1]) - 1;
-        return meses[num];
+        return mesesNombres[num];
     },
     
     mesAnterior() {
@@ -222,11 +228,127 @@ const presupuesto = {
     },
     
     abrirAgregarPresupuesto() {
-        alert('Modal para agregar presupuesto (pendiente de implementar)');
+        let html = `
+            <div class="modal-overlay" id="modal-agregar-pres">
+                <div class="modal-container">
+                    <div class="modal-header">
+                        <h2>➕ Agregar Presupuestos</h2>
+                        <button class="modal-close" onclick="document.getElementById('modal-agregar-pres').remove()">✕</button>
+                    </div>
+                    <div class="modal-tab" style="padding: 1.5rem 0;">
+                        <p style="margin-bottom: 1.5rem; font-weight: 700;">Selecciona las categorías que deseas presupuestar:</p>
+                        <div class="checkbox-grid">
+        `;
+        
+        app.categorias.egresos.forEach(cat => {
+            const estaAgregado = app.presupuestos.some(p => p.categoria === cat.nombre);
+            html += `
+                <label class="checkbox-item">
+                    <input type="checkbox" value="${cat.nombre}" ${estaAgregado ? 'disabled checked' : ''}>
+                    <span>${cat.nombre} ${estaAgregado ? '(Agregado)' : ''}</span>
+                </label>
+            `;
+        });
+        
+        html += `
+                        </div>
+                        <button class="btn-primary" style="margin-top: 2rem;" onclick="presupuesto.guardarNuevosPresupuestos()">Agregar Seleccionados</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', html);
+    },
+    
+    guardarNuevosPresupuestos() {
+        const seleccionados = Array.from(document.querySelectorAll('#modal-agregar-pres input[type="checkbox"]:checked'))
+            .map(cb => cb.value)
+            .map(nombre => app.categorias.egresos.find(c => c.nombre === nombre))
+            .filter(c => c && !app.presupuestos.some(p => p.categoria === c.nombre));
+        
+        if (seleccionados.length === 0) {
+            alert('Selecciona al menos una categoría');
+            return;
+        }
+        
+        app.agregarPresupuesto(seleccionados);
+        document.getElementById('modal-agregar-pres').remove();
+        presupuesto.renderizar();
+        alert('✅ Presupuestos agregados');
     },
     
     abrirEditarPresupuesto(id) {
         const p = app.presupuestos.find(x => x.id === id);
-        alert(`Editar: ${p.concepto} (pendiente de implementar)`);
+        
+        let html = `
+            <div class="modal-overlay" id="modal-editar-pres">
+                <div class="modal-container">
+                    <div class="modal-header">
+                        <h2>✏️ Editar: ${p.concepto}</h2>
+                        <button class="modal-close" onclick="document.getElementById('modal-editar-pres').remove()">✕</button>
+                    </div>
+                    <div class="modal-tab" style="padding: 1.5rem 0;">
+                        <div class="form-grupo">
+                            <label class="form-label">Cuenta Asignada</label>
+                            <select class="form-select" id="edit-cuenta">
+                                <option value="">Selecciona cuenta</option>
+        `;
+        
+        app.cuentas.filter(c => !c.archivado).forEach(c => {
+            html += `<option value="${c.nombre}" ${p.cuentaAsignada === c.nombre ? 'selected' : ''}>${c.nombre}</option>`;
+        });
+        
+        html += `
+                            </select>
+                        </div>
+                        <div class="form-grupo">
+                            <label class="form-label">Asignado a:</label>
+                            <div style="display: flex; gap: 1rem;">
+                                <label><input type="radio" name="asignado" value="él" ${p.asignadoA === 'él' ? 'checked' : ''}> 💙 Él</label>
+                                <label><input type="radio" name="asignado" value="ella" ${p.asignadoA === 'ella' ? 'checked' : ''}> 🧡 Ella</label>
+                                <label><input type="radio" name="asignado" value="familiar" ${p.asignadoA === 'familiar' ? 'checked' : ''}> 💚 Familiar</label>
+                            </div>
+                        </div>
+                        <h4 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 700;">Meses del Año:</h4>
+                        <div class="meses-grid">
+        `;
+        
+        const mesesNombres = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        mesesNombres.forEach((mes, i) => {
+            const mesKey = `2026-${String(i + 1).padStart(2, '0')}`;
+            const valor = p.meses[mesKey] || 0;
+            html += `
+                <div class="mes-input-grupo">
+                    <label>${mes}</label>
+                    <input type="number" class="mes-input" data-mes="${mesKey}" value="${valor}">
+                </div>
+            `;
+        });
+        
+        html += `
+                        </div>
+                        <button class="btn-primary" style="margin-top: 2rem;" onclick="presupuesto.guardarEdicion(${id})">Guardar Cambios</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', html);
+    },
+    
+    guardarEdicion(id) {
+        const cuenta = document.getElementById('edit-cuenta').value;
+        const asignado = document.querySelector('input[name="asignado"]:checked').value;
+        const meses = {};
+        
+        document.querySelectorAll('.mes-input').forEach(input => {
+            meses[input.dataset.mes] = parseFloat(input.value) || 0;
+        });
+        
+        app.actualizarPresupuesto(id, cuenta, asignado, meses);
+        document.getElementById('modal-editar-pres').remove();
+        presupuesto.renderizar();
+        alert('✅ Presupuesto actualizado');
     }
 };
